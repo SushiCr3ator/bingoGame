@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-# define maxSize 100
+# define maxSize 75
 int balls[maxSize] = {};
 int players,currSize,currPos,currPlayCount;
 int maxPlayCount = maxSize-1;
