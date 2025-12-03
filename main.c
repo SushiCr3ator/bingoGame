@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-# define maxSize 10
+# define maxSize 100
 int balls[maxSize] = {};
 int players,currSize,currPos;
 
@@ -17,7 +17,7 @@ int _start() {
         }
         _start();
     }
-}
+}//maybe do smth with dynamic arrays for the player bingo cards
 
 void _ballInit() {//initializes the balls
     for (int i = 0; i< maxSize; i++) {
