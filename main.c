@@ -8,10 +8,10 @@ int players,currSize,currPos,currPlayCount;
 int maxPlayCount = maxSize-1;
 
 void _history() {
-    FILE* fHistory;
-    fHistory = fopen("historyText.txt", "w");
-    fprintf(fHistory, "test\n");
-    fclose(fHistory);
+    FILE *printHistory;
+    printHistory = fopen("historyText.txt", "a");
+    fprintf(printHistory, "test2\n");
+    fclose(printHistory);
     printf("current game has been saved!");
 }
 
