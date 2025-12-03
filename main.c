@@ -4,7 +4,8 @@
 
 # define maxSize 100
 int balls[maxSize] = {};
-int players,currSize,currPos;
+int players,currSize,currPos,currPlayCount;
+int maxPlayCount = maxSize-1;
 
 int _start() {
     while (scanf("%d", &players) != 1) {
@@ -33,26 +34,42 @@ int _getRandomNum() {//creates a random number using the seed
 }
 
 void deletePos(int pos) {
-    if (pos < 0 || pos >= currSize)//basically stops the deletion if its not even in array
+
+    if (pos < 0 || pos >= currSize) {
+        //basically stops the deletion if its not even in array
         return;
-    for (int i = pos; i < currSize - 1; i++)//replaces the currPos witht the prev pos'
+    }
+    for (int i = pos; i < currSize - 1; i++) {
+        //replaces the currPos witht the prev pos'
         balls[i] = balls[i + 1];
+    }
     currSize--;//and srinks the array to simulate deletion
+
+
 }
 
 void _newRound() {
-    printf("%d\n", _getRandomNum()); //line 29
-    deletePos(currPos);
-    char next;
-    printf("\nEnter 'c' to continue to the next round; else write 'e'...");
-    do {
-        scanf("%c", &next);
-        if (next == 'c')
+    if (currPlayCount < maxPlayCount) {
+        currPlayCount++;
+        printf("%d\n", _getRandomNum()); //line 29
+        deletePos(currPos);
+        char next;
+        printf("\nEnter 'c' to continue to the next round; else write 'e'...");
+        do {
+            scanf("%c", &next);
+            if (next == 'c') {
+
                 _newRound();
-        if (next == 'e')
-                exit(0);
-        printf("please write a valid command...");
-    }while (next != 'c');
+            }
+            else if (next == 'e')
+                    exit(0);
+            else if (next == 10)//because after the first loop it sets next as 10 not optimal but i did tis to set it back at empty
+                next = '\000';
+            else
+                printf("please write a valid command...");
+        }while (next != 'c');
+    }else
+    printf("you have finished all the BINGO balls!!!");
 
 }
 int main(void) {
