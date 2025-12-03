@@ -48,29 +48,29 @@ void deletePos(int pos) {
 
 }
 
-void _newRound() {
+void _round() {
     if (currPlayCount < maxPlayCount) {
         currPlayCount++;
         printf("%d\n", _getRandomNum()); //line 29
         deletePos(currPos);
+    }else
+        printf("you have finished all the BINGO balls!!!");
+}
+
+void _newRound() {
         char next;
         printf("\nEnter 'c' to continue to the next round; else write 'e'...");
         do {
             scanf("%c", &next);
             if (next == 'c') {
-
-                _newRound();
+                _round();
+                next = '\000';
             }
             else if (next == 'e')
                     exit(0);
-            else if (next == 10)//because after the first loop it sets next as 10 not optimal but i did tis to set it back at empty
-                next = '\000';
             else
                 printf("please write a valid command...");
         }while (next != 'c');
-    }else
-    printf("you have finished all the BINGO balls!!!");
-
 }
 int main(void) {
     printf("Welcome to BINGO!!!\nTo start the game please enter the amount of players:\n");
