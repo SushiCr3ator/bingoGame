@@ -66,8 +66,10 @@ void _newRound() {
                 _round();
                 next = '\000';
             }
-            else if (next == 'e')
-                    exit(0);
+            else if (next == 'e') {
+                printf("thx for playing!");
+                exit(0);
+            }
             else
                 printf("please write a valid command...");
         }while (next != 'c');
