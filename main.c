@@ -7,14 +7,6 @@ int balls[maxSize] = {};
 int players,currSize,currPos,currPlayCount;
 int maxPlayCount = maxSize-1;
 
-void _history() {
-    FILE *printHistory;
-    printHistory = fopen("historyText.txt", "a");
-    fprintf(printHistory, "test2\n");
-    fclose(printHistory);
-    printf("current game has been saved!");
-}
-
 int _start() {
     while (scanf("%d", &players) != 1) {
         printf("Please enter a valid number: ");
@@ -28,12 +20,19 @@ int _start() {
     }
 }//maybe do smth with dynamic arrays for the player bingo cards
 
-void _ballInit() {//initializes the balls
+void _init() {//initializes the balls
     for (int i = 0; i< maxSize; i++) {
         balls[i] = i;
         //printf("%d\n",maxBalls[i]);
     }
     currSize = maxSize;
+
+    FILE *printHistory;
+    printHistory = fopen("historyText.txt", "a");
+        fprintf(printHistory, "Started BINGO game:\n");
+        fprintf(printHistory, "----------------------------------------------------------\n");
+        fprintf(printHistory, "Given numbers (in right order):\n");
+    fclose(printHistory);
 }
 
 int _getRandomNum() {//creates a random number using the seed
@@ -56,10 +55,28 @@ void deletePos(int pos) {
 
 }
 
+void _history(int givenKey) {
+    FILE *printHistory;//creates a link
+    printHistory = fopen("historyText.txt", "a");//opens given file and takes a mode w(write)-a(append)-r(read)
+        fprintf(printHistory, "%d-",givenKey);//writes what ever is written like a printf function
+    fclose(printHistory);//closes the data
+}
+
+void _historyCloser() {
+    FILE *printHistory;
+    printHistory = fopen("historyText.txt", "a");
+        fprintf(printHistory, "\nEnd of game, history successfully updated!\n");
+        fprintf(printHistory, "-------------------------------------------------------\n");
+        fprintf(printHistory, "-------------------------------------------------------\n");
+    fclose(printHistory);
+}
+
 void _round() {
     if (currPlayCount < maxPlayCount) {
         currPlayCount++;
-        printf("%d\n", _getRandomNum()); //line 29
+        int givenNum = _getRandomNum();
+        printf("%d\n", givenNum); //line 29
+        _history(givenNum);
         deletePos(currPos);
     }else
         printf("you have finished all the BINGO balls!!!");
@@ -76,8 +93,9 @@ void _newRound() {
                 next = '\000';
             }
             else if (next == 'e') {
-                printf("thx for playing!");
-                exit(0);
+                _historyCloser();
+                printf("thx for playing!\n");
+                return;
             }
             else{
                 printf("\nError please enter valid command; Enter 'c' to continue to the next round; else write 'e'...");
@@ -87,10 +105,9 @@ void _newRound() {
 
 int main(void) {
     printf("Welcome to BINGO!!!\nTo start the game please enter the amount of players:\n");
-    _ballInit();
+    _init();
     //_start();
     srand(time(NULL)); // so everytime gives a different seed
     _newRound();
-    _history();
     return 0;
 }
