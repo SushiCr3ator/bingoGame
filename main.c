@@ -8,32 +8,15 @@ int players,currSize,currPos,currPlayCount;
 int maxPlayCount = maxSize-1;
 
 int _start() {
-    while (scanf("%d", &players) != 1) {
+    int value;
+    printf("Enter a number: ");
+    while (scanf("%d", &value) != 1) {//checks if given input is not a num
         printf("Please enter a valid number: ");
-        // clear invalid characters from input
         int c;
-        while ((c = getchar()) != '\n' && c != EOF) {}
-        if (scanf("%d", &players) == 1) {
-            return 0;
-        }
-        _start();
+        while ((c = getchar()) != '\n' && c != EOF) {}//removes the chars in value or else the scanf will infinitly fail
     }
+    return value;
 }//maybe do smth with dynamic arrays for the player bingo cards
-
-void _init() {//initializes the balls
-    for (int i = 0; i< maxSize; i++) {
-        balls[i] = i;
-        //printf("%d\n",maxBalls[i]);
-    }
-    currSize = maxSize;
-
-    FILE *printHistory;
-    printHistory = fopen("historyText.txt", "a");
-        fprintf(printHistory, "Started BINGO game:\n");
-        fprintf(printHistory, "----------------------------------------------------------\n");
-        fprintf(printHistory, "Given numbers (in right order):\n");
-    fclose(printHistory);
-}
 
 int _getRandomNum() {//creates a random number using the seed
     currPos = rand() % currSize + 1;//= random of max amount '+' min value
@@ -53,6 +36,40 @@ void deletePos(int pos) {
     currSize--;//and srinks the array to simulate deletion
 
 
+}
+
+void _cardGenerator(int total) {//redundant 2D array but will use for smth else soon
+    FILE *printCard;
+    printCard = fopen("CardLists.txt","a");
+    fprintf(printCard,"------------------------------------------\n");
+    for (int i = 1; i <= total;i++) {
+        fprintf(printCard,"player %d:\n",i);
+        int card[5][5] ={};
+        for (int col = 0; col < 5;col++) {
+            for (int rows = 0; rows < 5;rows++) {
+                card[rows][col] = _getRandomNum();
+                fprintf(printCard,"%d |",card[rows][col]);
+            }
+            fprintf(printCard,"\n");
+        }
+        fprintf(printCard,"------------------------------------------\n");
+    }
+    fclose(printCard);
+}
+
+void _init() {//initializes the balls
+    for (int i = 0; i< maxSize; i++) {
+        balls[i] = i;
+        //printf("%d\n",maxBalls[i]);
+    }
+    currSize = maxSize;
+    _cardGenerator(_start());
+    FILE *printHistory;
+    printHistory = fopen("historyText.txt", "a");
+        fprintf(printHistory, "Started BINGO game:\n");
+        fprintf(printHistory, "----------------------------------------------------------\n");
+        fprintf(printHistory, "Given numbers (in right order):\n");
+    fclose(printHistory);
 }
 
 void _history(int givenKey) {
@@ -75,14 +92,14 @@ void _round() {
     if (currPlayCount < maxPlayCount) {
         currPlayCount++;
         int givenNum = _getRandomNum();
-        printf("%d\n", givenNum); //line 29
+        printf("%d\n", givenNum);
         _history(givenNum);
         deletePos(currPos);
     }else
         printf("you have finished all the BINGO balls!!!");
 }
 
-void _newRound() {
+void _playerInput() {
         char next;
         do {
             next = '\000';
@@ -104,10 +121,9 @@ void _newRound() {
 }
 
 int main(void) {
-    printf("Welcome to BINGO!!!\nTo start the game please enter the amount of players:\n");
+    printf("Welcome to BINGO!!!\nTo start the game please enter the amount of players!\n");
     _init();
-    //_start();
     srand(time(NULL)); // so everytime gives a different seed
-    _newRound();
+    _playerInput();
     return 0;
 }
