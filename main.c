@@ -7,6 +7,14 @@ int balls[maxSize] = {};
 int players,currSize,currPos,currPlayCount;
 int maxPlayCount = maxSize-1;
 
+void _history() {
+    FILE* fHistory;
+    fHistory = fopen("historyText.txt", "w");
+    fprintf(fHistory, "test\n");
+    fclose(fHistory);
+    printf("current game has been saved!");
+}
+
 int _start() {
     while (scanf("%d", &players) != 1) {
         printf("Please enter a valid number: ");
@@ -59,9 +67,10 @@ void _round() {
 
 void _newRound() {
         char next;
-        printf("\nEnter 'c' to continue to the next round; else write 'e'...");
         do {
-            scanf("%c", &next);
+            next = '\000';
+            printf("\nEnter 'c' to continue to the next round; else write 'e'...");
+            scanf(" %c", &next);//there should be a space before %c so that the scanf will skip anything unwanted (10)
             if (next == 'c') {
                 _round();
                 next = '\000';
@@ -70,17 +79,18 @@ void _newRound() {
                 printf("thx for playing!");
                 exit(0);
             }
-            else
-                printf("please write a valid command...");
+            else{
+                printf("\nError please enter valid command; Enter 'c' to continue to the next round; else write 'e'...");
+            }
         }while (next != 'c');
 }
+
 int main(void) {
     printf("Welcome to BINGO!!!\nTo start the game please enter the amount of players:\n");
     _ballInit();
     //_start();
     srand(time(NULL)); // so everytime gives a different seed
     _newRound();
-
-
+    _history();
     return 0;
 }
