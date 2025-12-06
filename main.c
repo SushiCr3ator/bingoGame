@@ -23,12 +23,24 @@ int _getRandomNum() {//creates a random number using the seed
     return currPos;
 }
 
-void deletePos(int arr[], int pos) {
+void _deletePos(int arr[], int pos) {
     for (int i = pos; i < currSize-1; i++) {
         //replaces the currPos witht the prev pos'
         arr[i] = arr[i + 1];
     }
     currSize--;//and srinks the array to simulate deletion
+}
+
+int _checkPos(int forCheckNum[],int gNum) {
+    int returnedNum;
+    for (int z = 0; z <= sizeof(forCheckNum);z++) {
+        if (forCheckNum[z] == gNum) {
+            gNum = _getRandomNum();
+            z = 0;
+        }
+    }
+    returnedNum = gNum;
+    return returnedNum;
 }
 
 void _cardGenerator(int total) {//redundant 2D array but will use for smth else soon
@@ -37,11 +49,20 @@ void _cardGenerator(int total) {//redundant 2D array but will use for smth else 
     fprintf(printCard,"------------------------------------------\n");
     for (int i = 1; i <= total;i++) {
         fprintf(printCard,"player %d:\n",i);
-        int card[5][5] ={};
+        int card[5][5] = {};
+        int checkNum[25] = {};
         for (int col = 0; col < 5;col++) {
             for (int rows = 0; rows < 5;rows++) {
-                card[rows][col] = balls[_getRandomNum()];
+                int x = _getRandomNum();
+                x = _checkPos(checkNum, x);
+                card[rows][col] = balls[x];
                 fprintf(printCard,"%d |",card[rows][col]);
+                for (int v = 0; v < sizeof(checkNum);v++) {
+                    if (checkNum[v] == 0) {
+                        checkNum[v] = card[rows][col];
+                        break;
+                    }
+                }
             }
             fprintf(printCard,"\n");
         }
@@ -87,7 +108,7 @@ void _round() {
         int givenNum = _getRandomNum();
         printf("%d\n", balls[givenNum]);
         _history(balls[givenNum]);
-        deletePos(balls,givenNum);
+        _deletePos(balls,givenNum);
     }else
         printf("you have finished all the BINGO balls!!!");
 }
