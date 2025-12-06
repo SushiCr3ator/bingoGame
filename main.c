@@ -114,24 +114,33 @@ void _round() {
 }
 
 void _playerInput() {
-        char next;
-        do {//while (next != 'c')
-            printf("\nEnter 'c' to continue to the next round; else write 'e'...");
-            scanf(" %c", &next);//there should be a space before %c so that the scanf will skip anything unwanted (10)
-            if (next == 'c') {
+    char next;
+    while (next != 'e') {
+        printf("\nEnter 'p' to continue to the next round; 'c' to clear data; else write 'e'...");
+        scanf(" %c", &next);//there should be a space before %c so that the scanf will skip anything unwanted (10)
+        switch (next) {
+            case 'p':
                 _round();
-
-            }
-            else if (next == 'e') {
+                next = '\000';
+                break;
+            case 'e':
                 _historyCloser();
                 printf("thx for playing!\n");
-                return;
-            }
-            else{
-                printf("\nError please enter valid command; Enter 'c' to continue to the next round; else write 'e'...");
-            }
-            next = '\000';
-        }while (next != 'c');
+                break;
+            case 'c':
+                FILE *f = fopen("historyText.txt", "w");
+                fprintf(f, "BingoGame History:\n----------------------------------------------------------\n");
+                fclose(f);
+                FILE *c = fopen("CardLists.txt", "w");
+                fprintf(c, "Generated Cards:\n----------------------------------------------------------\n");
+                fclose(c);
+                printf("history and cards successfully cleared!");
+                exit(0);
+        default:
+            printf("\nError please enter valid command; Enter 'c' to continue to the next round; else write 'e'...");
+                break;
+        }
+    }
 }
 
 int main(void) {
